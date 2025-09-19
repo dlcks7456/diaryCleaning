@@ -1,0 +1,47 @@
+[data_validation]
+product_list = ["제품 C", "제품 P", "제품 R"]
+max_answers = 36
+default_excel_sheet_index = 1
+duration_max = 500
+
+[column_names]
+index_col = "IndexNum"
+panel_no = "PANELNO"
+input_col = "Q1"
+order_col = "Q2"
+product_col = "Q3"
+start_col = "Q4"
+end_col = "Q5"
+answer_date = "FINISHED_AT"
+area = "AREA"
+age_5 = "AGE_5"
+
+[problem_columns]
+columns = [
+    "Q6_NA", "Q6_1", "Q6_2", "Q6_3", "Q6_4", "Q6_5",
+    "Q6_6", "Q6_7", "Q6_8", "Q6_9", "Q6_10", "Q6_11", "Q6_ETC"
+]
+
+[error_columns]
+order_error = "제품 순서 오류"
+day_order_error = "날짜 순서 오류"
+duplicate_error = "착용 순서 중복 오류"
+answer_count_error = "제품당 사용 수 오류"
+start_duplicate = "시작 시간 확인"
+end_duplicate = "종료 시간 확인"
+start_end_duplicate = "중복 응답"
+answer_combine = "결합 데이터"
+total_duration = "총 착용 시간(분)"
+duration_error = "착용 시간 확인"
+time_error = "직전 응답 시간 확인"
+
+[ui_colors]
+chart_color = "#4781ff"
+error_cell_background = "#ffcccc"
+
+[session_variables]
+need_session = ["raw_data", "raw_data_path", "selected_page"]
+default_page = "Guide Page"
+
+[data_preview]
+preview_rows = 30

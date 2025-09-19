@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+/* 전체 폰트 설정 */
+html,
+body,
+[class*='css'] {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 메인 컨테이너 */
+.main .block-container {
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  margin-top: 1rem;
+}
+
+/* 사이드바 스타일 */
+.css-1d391kg {
+  background: linear-gradient(180deg, #4781ff 0%, #3b6dcc 100%);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 제목 스타일 - 현대적이고 매력적인 디자인 */
+h1 {
+  background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  font-weight: 800;
+  font-size: 3.5rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.02em;
+  text-shadow: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  position: relative;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
+  border-radius: 2px;
+}
+
+/* 헤더 스타일 */
+h2,
+h3 {
+  color: #4781ff;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 버튼 스타일 */
+.stButton > button {
+  background: linear-gradient(45deg, #4781ff, #6b96ff);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(71, 129, 255, 0.3);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.stButton > button:hover {
+  background: linear-gradient(45deg, #3b6dcc, #5a85e6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(71, 129, 255, 0.4);
+}
+
+/* selectbox 스타일 */
+.stSelectbox > div > div {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e0e6ff;
+  border-radius: 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 메트릭 카드 스타일 */
+.metric-card {
+  background: linear-gradient(135deg, #4781ff, #6b96ff);
+  color: white;
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(71, 129, 255, 0.3);
+  margin: 0.5rem 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 사이드바 텍스트 색상 */
+.css-1d391kg .element-container {
+  color: white;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 데이터프레임 스타일 */
+.stDataFrame {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 입력 필드 스타일 */
+.stTextInput > div > div {
+  border-radius: 10px;
+  border: 1px solid #e0e6ff;
+  transition: border-color 0.3s ease;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.stTextInput > div > div:focus-within {
+  border-color: #4781ff;
+  box-shadow: 0 0 0 2px rgba(71, 129, 255, 0.2);
+}
+
+/* Progress Bar 스타일 */
+.stProgress > div > div > div > div {
+  background-color: #4781ff !important;
+}
+
+.stProgress .progress-bar {
+  background-color: #4781ff !important;
+}
+
+/* 모든 텍스트 요소에 폰트 적용 */
+.stMarkdown,
+.stText,
+.stCaption,
+.stMetric {
+  font-family: 'Noto Sans KR', sans-serif;
+}
