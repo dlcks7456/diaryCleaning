@@ -8,6 +8,7 @@ from utils.column_manager import (
     get_log_column_names
 )
 from features.setting import get_product_list, get_max_answers, get_duration_max
+from utils.data_convert import convert_data
 
 def show_error_check():
     """
@@ -125,6 +126,9 @@ def show_error_check():
                 else:
                     st.caption("제품 응답이 없습니다.")
 
+        if st.session_state.get('data_edited', False) == True :
+            st.warning("⚠️ 데이터 수정 후 저장 버튼 클릭 및 Re-Convert로 다시 에러 체크 진행")
+
         if error_panel is not None :
             # 필요한 컬럼들이 데이터프레임에 존재하는지 확인
             error_check_columns = [error_col, unique_id, panel_no, answer_combine, input_col, order_col, product_col, start_col, end_col, total_duration]
@@ -208,25 +212,24 @@ def show_error_check():
                 )
             }
 
+
             with st.form(key="duplicate_editor"):
                 data_editor = st.data_editor(
                     error_df,
                     width='stretch',
                     column_config=column_config,
                     hide_index=True,
-                    num_rows="fixed"
+                    num_rows="fixed",
+                    # on_change 파라미터는 지원하지 않으므로 제거
                 )
+                # 데이터가 수정되었는지 확인 (수정 감지는 직접 비교 필요)
+                if not st.session_state.get('original_error_df') is None:
+                    if not data_editor.equals(st.session_state['original_error_df']):
+                        st.session_state['data_edited'] = True
+                else:
+                    st.session_state['original_error_df'] = error_df.copy()
 
-                btn_col1, btn_col2, btn_col3, btn_col4 = st.columns([2, 3, 3, 2])
-                with btn_col1 :
-                    reset_btn = st.form_submit_button("🔄 초기화", width='stretch')
-                with btn_col4 :
-                    save_btn = st.form_submit_button("💾 저장", width='stretch')
-
-                # 버튼 동작 처리
-                if reset_btn:
-                    st.success("✅ 데이터가 초기화되었습니다.")
-                    st.rerun()
+                save_btn = st.form_submit_button("💾 저장", width='stretch')
 
                 if save_btn:
                     st.session_state['updated_data'] = True
@@ -278,6 +281,14 @@ def show_error_check():
 
                     except Exception as e:
                         st.error(f"❌ 저장 중 오류가 발생했습니다: {str(e)}")
+
+        if st.session_state.get('show_save_btn', False) == True:
+            st.session_state['data_edited'] = False
+            re_convert_btn = st.button("🚀 Re-Convert", width='stretch', type='primary')
+            if re_convert_btn:
+                st.session_state['show_save_btn'] = False
+                convert_data()
+                st.rerun()
 
     else :
         st.success(f"**[{select_error_type}]** 에러 케이스가 없습니다.")
