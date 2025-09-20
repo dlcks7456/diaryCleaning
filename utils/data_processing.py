@@ -1,12 +1,19 @@
 """
 데이터 처리 관련 유틸리티 함수들
 data_convert.py에서 사용되는 컬럼 생성 및 오류 검사 로직을 모듈화
+
+이 모듈은 데이터 변환 과정에서 필요한 다양한 처리 함수들을 제공합니다:
+- 날짜/시간 컬럼 분리
+- 지속시간 계산
+- 오류 검사 및 컬럼 추가
+- 응답 데이터 결합
 """
 
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from features.setting import get_column_name, get_error_column, get_max_answers, get_product_list, get_duration_max
+from features.setting import get_max_answers, get_product_list, get_duration_max
+from utils.column_manager import get_column_manager
 
 
 
@@ -369,23 +376,27 @@ def add_error_columns(df, error_data):
     """
     df_copy = df.copy()
 
-    # 컬럼명 가져오기
-    start_time = get_column_name('start_time')
-    end_time = get_column_name('end_time')
-    order_col = get_column_name('order_col')
-    input_col = get_column_name('input_col')
-    product_col = get_column_name('product_col')
-    total_duration = get_error_column('total_duration')
-    answer_combine = get_error_column('answer_combine')
-
-    order_error = get_error_column('order_error')
-    duplicate_error = get_error_column('duplicate_error')
-    day_order_error = get_error_column('day_order_error')
-    answer_count_error = get_error_column('answer_count_error')
-    start_end_duplicate = get_error_column('start_end_duplicate')
-    duration_error = get_error_column('duration_error')
+    # 컬럼 매니저를 통해 컬럼명 가져오기
+    column_manager = get_column_manager()
+    
+    # 기본 컬럼명들 가져오기
+    order_col = column_manager.get_column('order_col')
+    input_col = column_manager.get_column('input_col')
+    product_col = column_manager.get_column('product_col')
+    
+    # 에러 컬럼명들 가져오기
+    total_duration = column_manager.get_error_column('total_duration')
+    answer_combine = column_manager.get_error_column('answer_combine')
+    order_error = column_manager.get_error_column('order_error')
+    duplicate_error = column_manager.get_error_column('duplicate_error')
+    day_order_error = column_manager.get_error_column('day_order_error')
+    answer_count_error = column_manager.get_error_column('answer_count_error')
+    start_end_duplicate = column_manager.get_error_column('start_end_duplicate')
+    duration_error = column_manager.get_error_column('duration_error')
+    time_error = column_manager.get_error_column('time_error')
+    
+    # 설정값 가져오기
     duration_max = get_duration_max()
-    time_error = get_error_column('time_error')
 
     # 오류 시리즈 생성
     order_error_series = df_copy.index.isin(error_data['order_errors'])

@@ -1,12 +1,21 @@
 import streamlit as st
 import pandas as pd
 from utils.data_loader import show_data_info
-from features.setting import get_product_list, get_max_answers, get_column_name, get_error_column, get_duration_max
 from utils.record_log import record_log
 from datetime import datetime
+from utils.column_manager import (
+    get_column_manager,
+    get_log_column_names
+)
+from features.setting import get_product_list, get_max_answers, get_duration_max
 
 def show_error_check():
-    """Error Check 페이지를 표시합니다."""
+    """
+    Error Check 페이지를 표시합니다.
+    
+    이 함수는 데이터의 오류를 검사하고 수정할 수 있는 인터페이스를 제공합니다.
+    다양한 오류 유형별로 필터링하고 수정할 수 있습니다.
+    """
     st.header('🔍 Error Check')
 
     # 세션 상태에서 데이터 가져오기
@@ -18,30 +27,33 @@ def show_error_check():
 
     df = raw_data.copy()
 
-    # Error Columns
-    # 설정에서 컬럼명 가져오기
+    # 컬럼 매니저를 통해 모든 컬럼명을 한 번에 가져옴
+    column_manager = get_column_manager()
+    
+    # 개별 컬럼명들 가져오기
+    index_col = column_manager.get_column('index_col')
+    unique_id = column_manager.get_column('unique_id')
+    panel_no = column_manager.get_column('panel_no')
+    input_col = column_manager.get_column('input_col')  # Q1
+    order_col = column_manager.get_column('order_col')  # Q2
+    product_col = column_manager.get_column('product_col')  # Q3
+    start_col = column_manager.get_column('start_col')  # Q4
+    end_col = column_manager.get_column('end_col')  # Q5
+    
+    # 에러 컬럼명들 가져오기
+    order_error = column_manager.get_error_column('order_error')
+    duplicate_error = column_manager.get_error_column('duplicate_error')
+    day_order_error = column_manager.get_error_column('day_order_error')
+    answer_count_error = column_manager.get_error_column('answer_count_error')
+    start_end_duplicate = column_manager.get_error_column('start_end_duplicate')
+    total_duration = column_manager.get_error_column('total_duration')
+    time_error = column_manager.get_error_column('time_error')
+    answer_combine = column_manager.get_error_column('answer_combine')
+    duration_error = column_manager.get_error_column('duration_error')
+
+    # 설정값들 가져오기
     product_list = get_product_list()
-    index_col = get_column_name('index_col')
-    unique_id = get_column_name('unique_id')
-    panel_no = get_column_name('panel_no')
-    input_col = get_column_name('input_col') # Q1
-    order_col = get_column_name('order_col') # Q2
-    product_col = get_column_name('product_col') # Q3
-    start_col = get_column_name('start_col') # Q4
-    end_col = get_column_name('end_col') # Q5
-    order_error = get_error_column('order_error')
-    duplicate_error = get_error_column('duplicate_error')
-    day_order_error = get_error_column('day_order_error')
-    answer_count_error = get_error_column('answer_count_error')
-    start_end_duplicate = get_error_column('start_end_duplicate')
-    total_duration = get_error_column('total_duration')
-    time_error = get_error_column('time_error')
-
-    answer_combine = get_error_column('answer_combine')
-
-    duration_error = get_error_column('duration_error')
     duration_max = get_duration_max()
-
     max_answers = get_max_answers()
 
     error_structure = {
@@ -81,8 +93,8 @@ def show_error_check():
             "check_col": f"착용 시간 초과(최대 {duration_max}분 이상 리체크) : **{start_col}/{end_col} 확인**"
         }
     }
-    select_error_type = st.selectbox("📌 **오류 유형 선택**", error_structure.keys(), index=0, width=300)
 
+    select_error_type = st.selectbox("📌 **오류 유형 선택**", error_structure.keys(), index=0, width=300)
     error_condition = error_structure[select_error_type]["cond"]
     error_col = error_structure[select_error_type]["col"]
     error_check_col = error_structure[select_error_type]["check_col"]
@@ -217,13 +229,14 @@ def show_error_check():
                     st.rerun()
 
                 if save_btn:
+                    st.session_state['updated_data'] = True
                     try:
                         # 삭제 체크된 행들 처리
                         rows_to_delete = data_editor[data_editor[delete_col] == True].index.tolist()
 
                         # 그 다음 삭제 체크된 행들 처리
-                        log_columns = [col for col in [unique_id, panel_no, input_col, order_col, product_col, start_col, end_col]
-                                      if col in df.columns and col is not None and col != '']
+                        log_columns = get_log_column_names()
+                        log_columns = [col for col in log_columns if col in df.columns and col is not None and col != '']
                         curr_time = datetime.now().strftime('%Y%m%d_%H%M%S')
                         modified_count = 0  # 수정된 데이터 개수 추적
 
@@ -267,4 +280,4 @@ def show_error_check():
                         st.error(f"❌ 저장 중 오류가 발생했습니다: {str(e)}")
 
     else :
-        st.success("중복 응답이 없습니다.")
+        st.success(f"**[{select_error_type}]** 에러 케이스가 없습니다.")

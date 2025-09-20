@@ -1,134 +1,148 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap");
 
 /* 전체 폰트 설정 */
 html,
 body,
-[class*='css'] {
-  font-family: 'Noto Sans KR', sans-serif;
+[class*="css"] {
+	font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 메인 컨테이너 */
 .main .block-container {
-  border-radius: 15px;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  margin-top: 1rem;
+	border-radius: 15px;
+	padding: 2rem;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(10px);
+	margin-top: 1rem;
 }
 
 /* 사이드바 스타일 */
 .css-1d391kg {
-  background: linear-gradient(180deg, #4781ff 0%, #3b6dcc 100%);
-  font-family: 'Noto Sans KR', sans-serif;
+	background: linear-gradient(180deg, #4781ff 0%, #3b6dcc 100%);
+	font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 제목 스타일 - 현대적이고 매력적인 디자인 */
 h1 {
-  background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-align: center;
-  font-weight: 800;
-  font-size: 3.5rem;
-  margin-bottom: 2.5rem;
-  letter-spacing: -0.02em;
-  text-shadow: none;
-  font-family: 'Noto Sans KR', sans-serif;
-  position: relative;
+	background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	text-align: center;
+	font-weight: 800;
+	font-size: 3.5rem;
+	margin-bottom: 2.5rem;
+	letter-spacing: -0.02em;
+	text-shadow: none;
+	font-family: "Noto Sans KR", sans-serif;
+	position: relative;
 }
 
 h1::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 4px;
-  background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
-  border-radius: 2px;
+	content: "";
+	position: absolute;
+	bottom: -10px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100px;
+	height: 4px;
+	background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
+	border-radius: 2px;
 }
 
 /* 헤더 스타일 */
 h2,
 h3 {
-  color: #4781ff;
-  font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+	color: #4781ff;
+	font-weight: 600;
+	font-family: "Noto Sans KR", sans-serif;
 }
 
-/* 버튼 스타일 */
+/* 일반 버튼 스타일 */
 .stButton > button {
-  background: linear-gradient(45deg, #4781ff, #6b96ff);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(71, 129, 255, 0.3);
-  font-family: 'Noto Sans KR', sans-serif;
+	background: white;
+	color: #4781ff !important;
+	border: 1px solid #4781ff;
+	border-radius: 10px;
+	font-weight: 600;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(71, 129, 255, 0.1);
+	font-family: "Noto Sans KR", sans-serif;
 }
 
 .stButton > button:hover {
-  background: linear-gradient(45deg, #3b6dcc, #5a85e6);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(71, 129, 255, 0.4);
+	background: #4781ff;
+	color: white !important;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 15px rgba(71, 129, 255, 0.3);
+}
+
+/* Primary 버튼 전용 스타일 */
+.stButton > button[kind="primary"] {
+	background: linear-gradient(45deg, #4781ff, #6b96ff) !important;
+	color: white !important;
+	border: none !important;
+	box-shadow: 0 4px 15px rgba(71, 129, 255, 0.3);
+}
+
+.stButton > button[kind="primary"]:hover {
+	background: linear-gradient(45deg, #3b6dcc, #5a85e6) !important;
+	box-shadow: 0 6px 20px rgba(71, 129, 255, 0.4);
 }
 
 /* selectbox 스타일 */
 .stSelectbox > div > div {
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e0e6ff;
-  border-radius: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+	background-color: rgba(255, 255, 255, 0.9);
+	border: 1px solid #e0e6ff;
+	border-radius: 10px;
+	font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 메트릭 카드 스타일 */
 .metric-card {
-  background: linear-gradient(135deg, #4781ff, #6b96ff);
-  color: white;
-  padding: 1rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(71, 129, 255, 0.3);
-  margin: 0.5rem 0;
-  font-family: 'Noto Sans KR', sans-serif;
+	background: linear-gradient(135deg, #4781ff, #6b96ff);
+	color: white;
+	padding: 1rem;
+	border-radius: 15px;
+	box-shadow: 0 4px 15px rgba(71, 129, 255, 0.3);
+	margin: 0.5rem 0;
+	font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 사이드바 텍스트 색상 */
 .css-1d391kg .element-container {
-  color: white;
-  font-family: 'Noto Sans KR', sans-serif;
+	color: white;
+	font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 데이터프레임 스타일 */
 .stDataFrame {
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  font-family: 'Noto Sans KR', sans-serif;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 입력 필드 스타일 */
 .stTextInput > div > div {
-  border-radius: 10px;
-  border: 1px solid #e0e6ff;
-  transition: border-color 0.3s ease;
-  font-family: 'Noto Sans KR', sans-serif;
+	border-radius: 10px;
+	border: 1px solid #e0e6ff;
+	transition: border-color 0.3s ease;
+	font-family: "Noto Sans KR", sans-serif;
 }
 
 .stTextInput > div > div:focus-within {
-  border-color: #4781ff;
-  box-shadow: 0 0 0 2px rgba(71, 129, 255, 0.2);
+	border-color: #4781ff;
+	box-shadow: 0 0 0 2px rgba(71, 129, 255, 0.2);
 }
 
 /* Progress Bar 스타일 */
 .stProgress > div > div > div > div {
-  background-color: #4781ff !important;
+	background-color: #4781ff !important;
 }
 
 .stProgress .progress-bar {
-  background-color: #4781ff !important;
+	background-color: #4781ff !important;
 }
 
 /* 모든 텍스트 요소에 폰트 적용 */
@@ -136,5 +150,392 @@ h3 {
 .stText,
 .stCaption,
 .stMetric {
-  font-family: 'Noto Sans KR', sans-serif;
+	font-family: "Noto Sans KR", sans-serif;
+}
+
+/* Split & Merge 스타일 */
+.panel-line {
+	display: flex;
+	align-items: stretch;
+	width: 100%;
+	gap: 5px;
+	margin-block: 5px;
+
+	.panel-line-index {
+		width: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		font-weight: bold;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		padding: 5px;
+		font-size: 1rem;
+		background-color: #f0f0f0;
+	}
+
+	.panel-line-panel {
+		flex: 1;
+		font-size: 0.9rem;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		padding: 5px;
+	}
+}
+
+/* Streamlit 탭(Tab) 스타일 - 파란색(#4781ff)으로 통일 */
+.stTabs [data-baseweb="tab-list"] {
+	background: transparent;
+}
+
+.stTabs [data-baseweb="tab"] {
+	font-family: "Noto Sans KR", sans-serif;
+	font-weight: 500;
+	border-bottom: 2px solid transparent;
+	transition: border-color 0.2s;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"],
+.stTabs [data-baseweb="tab"]:hover {
+	color: #4781ff !important;
+}
+
+.stTabs [data-baseweb="tab-highlight"] {
+	background: #4781ff !important;
+}
+
+.guide-container {
+	font-family: "Noto Sans KR", sans-serif;
+	max-width: 100%;
+	margin: 0 auto;
+	padding: 20px;
+	background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.guide-header {
+	text-align: center;
+	margin-bottom: 40px;
+	padding: 30px;
+	background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
+	border-radius: 15px;
+	color: white;
+}
+
+.guide-header h2 {
+	margin: 0 0 10px 0;
+	font-size: 2.5rem;
+	font-weight: 700;
+}
+
+.guide-subtitle {
+	margin: 0;
+	font-size: 1.2rem;
+	opacity: 0.9;
+}
+
+.guide-section {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 25px;
+	margin-bottom: 40px;
+}
+
+.feature-card {
+	background: white;
+	border-radius: 15px;
+	padding: 25px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	border-left: 5px solid #4781ff;
+	margin-block: 10px;
+}
+
+.feature-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+	font-size: 3rem;
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+.feature-content h3 {
+	color: #4781ff;
+	margin: 0 0 15px 0;
+	font-size: 2rem;
+	font-weight: 600;
+}
+
+.feature-content p {
+	color: #666;
+	margin-bottom: 15px;
+	line-height: 1.6;
+}
+
+.feature-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.feature-list li {
+	padding: 8px 0;
+	color: #555;
+	border-bottom: 1px solid #f0f0f0;
+	position: relative;
+	padding-left: 25px;
+}
+
+.feature-list li:last-child {
+	border-bottom: none;
+}
+
+.feature-list li::before {
+	content: "✓";
+	position: absolute;
+	left: 0;
+	color: #4781ff;
+	font-weight: bold;
+}
+
+.workflow-section {
+	background: white;
+	border-radius: 15px;
+	padding: 30px;
+	margin-bottom: 40px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.workflow-section h3 {
+	color: #4781ff;
+	text-align: center;
+	margin-bottom: 30px;
+	font-size: 1.8rem;
+}
+
+.workflow-steps {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.step {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 20px;
+	background: #f8f9fa;
+	border-radius: 10px;
+	border-left: 4px solid #4781ff;
+}
+
+.step-number {
+	background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
+	color: white;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 1.2rem;
+	flex-shrink: 0;
+}
+
+.step-content h4 {
+	margin: 0 0 5px 0;
+	color: #333;
+	font-size: 1.2rem;
+}
+
+.step-content p {
+	margin: 0;
+	color: #666;
+	line-height: 1.5;
+}
+
+.tips-section {
+	background: white;
+	border-radius: 15px;
+	padding: 30px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.tips-section h3 {
+	color: #4781ff;
+	text-align: center;
+	margin-bottom: 25px;
+	font-size: 1.8rem;
+}
+
+.tips-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+}
+
+.tip-item {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	align-items: center;
+	gap: 15px;
+	padding: 20px;
+	background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+	border-radius: 10px;
+	border-left: 4px solid #28a745;
+}
+
+.tip-icon {
+	font-size: 2rem;
+	flex-shrink: 0;
+}
+
+.tip-text {
+	color: #333;
+	line-height: 1.5;
+}
+
+.tip-text strong {
+	color: #4781ff;
+}
+
+.support-section {
+	background: linear-gradient(135deg, #4781ff 0%, #6b96ff 100%);
+	color: white;
+	border-radius: 15px;
+	padding: 30px;
+	text-align: center;
+}
+
+.support-section h3 {
+	margin: 0 0 15px 0;
+	font-size: 1.8rem;
+}
+
+.support-section p {
+	margin: 0 0 20px 0;
+	opacity: 0.9;
+	font-size: 1.1rem;
+}
+
+.support-links {
+	display: flex;
+	justify-content: center;
+	gap: 30px;
+	flex-wrap: wrap;
+}
+
+.support-link {
+	background: rgba(255, 255, 255, 0.2);
+	padding: 10px 20px;
+	border-radius: 25px;
+	font-size: 0.9rem;
+	backdrop-filter: blur(10px);
+}
+
+.warning-section {
+	margin-top: 20px;
+	border-radius: 15px;
+	padding: 30px;
+	box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);
+	border-left: 5px solid #ffc107;
+	position: relative;
+	overflow: hidden;
+}
+
+.warning-section::before {
+	content: "⚠️";
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	font-size: 2rem;
+	opacity: 0.3;
+}
+
+.warning-section h3 {
+	color: #856404;
+	margin: 0 0 20px 0;
+	font-size: 1.8rem;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.warning-section p {
+	color: #856404;
+	margin: 0 0 15px 0;
+	line-height: 1.6;
+	font-size: 1rem;
+	position: relative;
+	padding-left: 20px;
+}
+
+.warning-section p::before {
+	content: "•";
+	position: absolute;
+	left: 0;
+	color: #ffc107;
+	font-weight: bold;
+	font-size: 1.2rem;
+}
+
+.warning-section p:last-child {
+	margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+	.guide-header h2 {
+		font-size: 2rem;
+	}
+
+	.guide-section {
+		grid-template-columns: 1fr;
+	}
+
+	.workflow-steps {
+		gap: 15px;
+	}
+
+	.step {
+		flex-direction: column;
+		text-align: center;
+		gap: 15px;
+	}
+
+	.tips-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.support-links {
+		flex-direction: column;
+		gap: 15px;
+	}
+
+	.warning-section {
+		padding: 20px;
+		margin-bottom: 30px;
+	}
+
+	.warning-section h3 {
+		font-size: 1.5rem;
+	}
+
+	.warning-section p {
+		font-size: 0.9rem;
+		padding-left: 15px;
+	}
+
+	.warning-section::before {
+		font-size: 1.5rem;
+		top: 15px;
+		right: 15px;
+	}
 }

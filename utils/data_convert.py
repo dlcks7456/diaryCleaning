@@ -5,63 +5,65 @@ import openpyxl as xl
 import os
 import re
 from datetime import datetime, timedelta
-from features.setting import get_column_name, get_error_column, get_max_answers, get_product_list, get_duration_max
 from utils.xl_layout import set_xl_layout
+from utils.column_manager import (
+    get_column_manager,
+    get_all_error_columns,
+    get_all_check_columns,
+    get_columns_to_remove,
+    get_derived_column_names
+)
 from utils.data_processing import (
     split_date_columns, split_time_columns, add_duration_column,
     check_order_errors, check_count_errors, check_duplicate_times,
     add_error_columns, add_answer_combine_column, compare_previous_response_and_time
 )
 
-def convert_data() :
+def convert_data(file_name='converted_data', rerun=True, set_path=None):
+    """
+    데이터를 변환하고 처리하는 메인 함수
+    
+    이 함수는 원시 데이터를 받아서 다음과 같은 처리를 수행합니다:
+    1. 날짜/시간 컬럼 분리
+    2. 지속시간 계산
+    3. 오류 검사 및 컬럼 추가
+    4. 엑셀 파일로 저장
+    
+    Args:
+        file_name (str): 저장할 파일명 (기본값: 'converted_data')
+        rerun (bool): 처리 완료 후 페이지 새로고침 여부 (기본값: True)
+        set_path (str): 저장 경로 (기본값: None, 자동 결정)
+    """
     raw_data = st.session_state.get("raw_data")
     if raw_data is None:
         st.warning("먼저 데이터를 로드해주세요.")
         return
-
-    max_answers = get_max_answers()
-
+    
     df = raw_data.copy()
 
-    # 설정에서 컬럼명 가져오기
-    product_list = get_product_list()
-    index_col = get_column_name('index_col')
-    panel_no = get_column_name('panel_no')
-    product_col = get_column_name('product_col')
-    order_col = get_column_name('order_col')
-    input_col = get_column_name('input_col')
-    start_col = get_column_name('start_col')
-    end_col = get_column_name('end_col')
-    order_error = get_error_column('order_error')
-    duplicate_error = get_error_column('duplicate_error')
-    day_order_error = get_error_column('day_order_error')
-    answer_count_error = get_error_column('answer_count_error')
-    start_end_duplicate = get_error_column('start_end_duplicate')
-    total_duration = get_error_column('total_duration')
-    time_error = get_error_column('time_error')
-
-    answer_combine = get_error_column('answer_combine')
-
-    duration_error = get_error_column('duration_error')
-    duration_max = get_duration_max()
-
-    error_columns = [order_error, duplicate_error, day_order_error, answer_count_error, start_end_duplicate, time_error]
-    check_columns = [duration_error]
-    # 기존에 추가된 컬럼들이 있는지 확인하고 삭제
-    start_time = f'{start_col}_time'
-    end_time = f'{end_col}_time'
-    input_month = f'{input_col}_month'
-    input_day = f'{input_col}_day'
-
-    columns_to_remove = [
-        input_month, input_day,
-        f'{start_col}_hour', f'{start_col}_min', start_time,
-        f'{end_col}_hour', f'{end_col}_min', end_time,
-        total_duration,
-        *error_columns,
-        *check_columns,
-        answer_combine,
-    ]
+    # 컬럼 매니저를 통해 모든 컬럼명을 한 번에 가져옴
+    column_manager = get_column_manager()
+    
+    # 컬럼 그룹들 가져오기
+    error_columns = get_all_error_columns()
+    check_columns = get_all_check_columns()
+    columns_to_remove = get_columns_to_remove()
+    
+    # 파생 컬럼명들 가져오기
+    derived_columns = get_derived_column_names()
+    
+    # 개별 컬럼명들 가져오기
+    panel_no = column_manager.get_column('panel_no')
+    product_col = column_manager.get_column('product_col')
+    order_col = column_manager.get_column('order_col')
+    input_col = column_manager.get_column('input_col')
+    start_col = column_manager.get_column('start_col')
+    end_col = column_manager.get_column('end_col')
+    index_col = column_manager.get_column('index_col')
+    
+    # 에러 컬럼명들 가져오기
+    total_duration = column_manager.get_error_column('total_duration')
+    answer_combine = column_manager.get_error_column('answer_combine')
 
     progress = st.progress(0)
     status_text = st.empty()
@@ -111,7 +113,7 @@ def convert_data() :
     # 4단계: 총 소요시간 계산 (함수 사용)
     update_status_display(3)
     progress.progress(35)
-    df = add_duration_column(df, time_data, start_col, end_col, total_duration, f'{end_col}_min')
+    df = add_duration_column(df, time_data, start_col, end_col, total_duration, derived_columns['end_min'])
 
     # 5단계: 오류 검사 준비
     update_status_display(4)
@@ -136,7 +138,11 @@ def convert_data() :
 
 
     # 직전 응답과 시간 비교
-    time_error_errors = compare_previous_response_and_time(df, panel_no, input_month, input_day, start_time, end_time)
+    time_error_errors = compare_previous_response_and_time(
+        df, panel_no, 
+        derived_columns['input_month'], derived_columns['input_day'], 
+        derived_columns['start_time'], derived_columns['end_time']
+    )
 
 
     # 7단계: 오류 컬럼 추가 (함수 사용)
@@ -160,29 +166,30 @@ def convert_data() :
     update_status_display(7)
     progress.progress(85)
     raw_data = df
-    st.session_state["raw_data"] = raw_data
 
     raw_data_path = st.session_state.get("raw_data_path")
     curr_datetime = datetime.now().strftime('%Y%m%d_%H%M%S')
-    file_name = f'converted_data_{curr_datetime}.xlsx'
+    origin_name = f'{file_name}_{curr_datetime}.xlsx'
+    file_name = origin_name
 
-    base_dir = os.path.dirname(raw_data_path) if raw_data_path else os.getcwd()
+    base_dir = set_path if set_path is not None else os.path.dirname(raw_data_path) if raw_data_path else os.getcwd()
     save_path = base_dir
 
     convert_data_path = st.session_state.get("convert_data_path")
-    if convert_data_path is None or convert_data_path == '':
+    if (convert_data_path is None or convert_data_path == '') and set_path is None:
         save_path = os.path.join(base_dir, 'convert')
         st.session_state["convert_data_path"] = save_path
     else:
         save_path = convert_data_path
 
-    if not os.path.exists(save_path):
+    if set_path is None and not os.path.exists(save_path):
         os.makedirs(save_path, exist_ok=True)
+
+    if set_path is not None:
+        save_path = set_path
 
     new_path = os.path.join(save_path, file_name)
     clean_data = raw_data.copy()
-
-    # st.session_state["raw_data_path"] = new_path
 
     # 9단계: 엑셀 스타일 적용
     update_status_display(8)
@@ -207,4 +214,9 @@ def convert_data() :
     status_text.empty()
     progress.empty()
 
+    st.session_state["raw_data"] = raw_data
+    st.session_state["curr_file_name"] = origin_name
+    st.session_state["base_directory"] = base_dir
     st.success(f"✅ {os.path.basename(file_name)}")
+    if rerun:
+        st.rerun()

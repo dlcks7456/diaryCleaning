@@ -6,6 +6,8 @@ duration_max = 500
 
 [column_names]
 index_col = "IndexNum"
+unique_id = "ANSWERID"
+panel_code = "PANELCODE"
 panel_no = "PANELNO"
 input_col = "Q1"
 order_col = "Q2"
@@ -40,7 +42,6 @@ chart_color = "#4781ff"
 error_cell_background = "#ffcccc"
 
 [session_variables]
-need_session = ["raw_data", "raw_data_path", "selected_page"]
 default_page = "Guide Page"
 
 [data_preview]

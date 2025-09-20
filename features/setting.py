@@ -121,67 +121,50 @@ def show_settings():
     st.header('⚙️ Settings')
 
     # SavePathManager 인스턴스 가져오기
-    save_path_manager = get_save_path_manager()
+    # save_path_manager = get_save_path_manager()
 
     # Path Setting
-    st.caption('🗂️ 저장될 파일 경로 설정')
-    st.caption('값을 입력하지 않으면 읽은 Raw Data와 동일 경로에 저장됩니다.')
-    col1, col2, col3 = st.columns(3)
+    # st.caption('🗂️ 저장될 파일 경로 설정')
+    # st.caption('값을 입력하지 않으면 읽은 Raw Data와 동일 경로에 저장됩니다.')
+    # col1, col2, col3 = st.columns(3)
 
-    def select_directory(title: str) -> str:
-        """파일 탐색기로 디렉토리를 선택하는 함수"""
-        try:
-            import tkinter as tk
-            from tkinter import filedialog
+    # def handle_path_setting(col, path_key: str, display_name: str, save_path_manager):
+    #     """경로 설정을 처리하는 공통 함수"""
+    #     with col:
+    #         # save_path.toml에서 저장된 값과 세션 상태 값 중 하나를 선택 (세션 상태 우선)
+    #         saved_path = save_path_manager.get_path(path_key)
+    #         current_path = st.session_state.get(path_key, saved_path)
+    #
+    #         path_value = st.text_input(f'{display_name} 저장 경로', value=current_path, disabled=True)
+    #         path_btn = st.button('경로 설정', width='stretch', key=f'{path_key}_btn')
+    #
+    #         if path_btn:
+    #             selected_path = select_directory(f"{display_name} 저장 경로 선택")
+    #             if selected_path:
+    #                 # 세션 상태와 save_path.toml 파일 모두에 저장
+    #                 if save_path_manager.set_path(path_key, selected_path):
+    #                     st.session_state[path_key] = selected_path
+    #                     st.rerun()
+    #                 # 에러 메시지는 set_path 내부에서 처리됨
+    #
+    #         # 세션 상태 동기화 (필요시)
+    #         if current_path != st.session_state.get(path_key):
+    #             st.session_state[path_key] = current_path
 
-            root = tk.Tk()
-            root.withdraw()
-            root.attributes("-topmost", True)
-            selected_path = filedialog.askdirectory(title=title)
-            root.destroy()
-
-            return selected_path or ""
-        except Exception as e:
-            st.error(f"파일 탐색기를 열 수 없습니다: {str(e)}")
-            return ""
-
-    def handle_path_setting(col, path_key: str, display_name: str, save_path_manager):
-        """경로 설정을 처리하는 공통 함수"""
-        with col:
-            # save_path.toml에서 저장된 값과 세션 상태 값 중 하나를 선택 (세션 상태 우선)
-            saved_path = save_path_manager.get_path(path_key)
-            current_path = st.session_state.get(path_key, saved_path)
-
-            path_value = st.text_input(f'{display_name} 저장 경로', value=current_path, disabled=True)
-            path_btn = st.button('경로 설정', width='stretch', key=f'{path_key}_btn')
-
-            if path_btn:
-                selected_path = select_directory(f"{display_name} 저장 경로 선택")
-                if selected_path:
-                    # 세션 상태와 save_path.toml 파일 모두에 저장
-                    if save_path_manager.set_path(path_key, selected_path):
-                        st.session_state[path_key] = selected_path
-                        st.rerun()
-                    # 에러 메시지는 set_path 내부에서 처리됨
-
-            # 세션 상태 동기화 (필요시)
-            if current_path != st.session_state.get(path_key):
-                st.session_state[path_key] = current_path
-
-    # 경로 설정 처리
-    path_settings = [
-        ('convert_data_path', '변환 데이터'),
-        ('split_data_path', '분할 데이터'),
-        ('log_save_path', '로그 데이터')
-    ]
-
-    for i, (path_key, display_name) in enumerate(path_settings):
-        if i == 0:
-            handle_path_setting(col1, path_key, display_name, save_path_manager)
-        elif i == 1:
-            handle_path_setting(col2, path_key, display_name, save_path_manager)
-        elif i == 2:
-            handle_path_setting(col3, path_key, display_name, save_path_manager)
+    # # 경로 설정 처리
+    # path_settings = [
+    #     ('convert_data_path', '변환 데이터'),
+    #     ('split_data_path', '분할 데이터'),
+    #     ('log_save_path', '로그 데이터')
+    # ]
+    #
+    # for i, (path_key, display_name) in enumerate(path_settings):
+    #     if i == 0:
+    #         handle_path_setting(col1, path_key, display_name, save_path_manager)
+    #     elif i == 1:
+    #         handle_path_setting(col2, path_key, display_name, save_path_manager)
+    #     elif i == 2:
+    #         handle_path_setting(col3, path_key, display_name, save_path_manager)
 
 
     setting_manager = get_setting_manager()
@@ -301,115 +284,115 @@ def get_duration_max() -> int:
     return get_setting_manager().get_value("data_validation", "duration_max", 500)
 
 
-class SavePathManager:
-    """save_path.toml 파일을 관리하는 클래스"""
-
-    def __init__(self, save_path_file: str = None):
-        # 현재 파일의 디렉토리를 기준으로 프로젝트 루트를 찾음
-        if save_path_file is None:
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            project_root = os.path.dirname(current_dir)  # features 폴더의 상위 디렉토리
-            save_path_file = os.path.join(project_root, "setup", "save_path.toml")
-        self.save_path_file = save_path_file
-        self._paths = None
-        self.load_paths()
-
-    def load_paths(self) -> Dict[str, str]:
-        """save_path.toml 파일을 로드합니다."""
-        try:
-            if os.path.exists(self.save_path_file):
-                with open(self.save_path_file, 'r', encoding='utf-8') as f:
-                    self._paths = toml.load(f)
-
-                # 로드된 경로가 실제로 존재하는지 검증하고, 존재하지 않으면 초기화
-                paths_updated = False
-                for path_key in ['convert_data_path', 'split_data_path', 'log_save_path']:
-                    if path_key in self._paths and self._paths[path_key]:
-                        # 경로가 비어있지 않은 경우에만 존재 여부 확인
-                        if not os.path.exists(self._paths[path_key]):
-                            st.warning(f"⚠️ 저장된 {path_key} 경로가 존재하지 않습니다. 경로를 초기화합니다: {self._paths[path_key]}")
-                            self._paths[path_key] = ''
-                            paths_updated = True
-                    elif path_key not in self._paths:
-                        # 키가 없는 경우 기본값 추가
-                        self._paths[path_key] = ''
-                        paths_updated = True
-
-                # 경로가 업데이트된 경우 파일에 저장
-                if paths_updated:
-                    self.save_paths(self._paths)
-
-            else:
-                # 파일이 없으면 기본값으로 생성
-                self._paths = {
-                    'convert_data_path': '',
-                    'split_data_path': '',
-                    'log_save_path': ''
-                }
-                self.save_paths(self._paths)
-        except Exception as e:
-            st.error(f"경로 설정 파일 로드 중 오류 발생: {str(e)}")
-            self._paths = {
-                'convert_data_path': '',
-                'split_data_path': '',
-                'log_save_path': ''
-            }
-        return self._paths
-
-    def save_paths(self, paths: Dict[str, str]) -> bool:
-        """save_path.toml 파일을 저장합니다."""
-        try:
-            with open(self.save_path_file, 'w', encoding='utf-8') as f:
-                toml.dump(paths, f)
-            self._paths = paths
-            return True
-        except Exception as e:
-            st.error(f"경로 설정 파일 저장 중 오류 발생: {str(e)}")
-            return False
-
-    def get_paths(self) -> Dict[str, str]:
-        """현재 경로 설정을 반환합니다."""
-        if self._paths is None:
-            self.load_paths()
-        return self._paths
-
-    def get_path(self, path_key: str) -> str:
-        """특정 경로를 반환합니다."""
-        paths = self.get_paths()
-        return paths.get(path_key, '')
-
-    def set_path(self, path_key: str, path_value: str) -> bool:
-        """특정 경로를 설정하고 저장합니다."""
-        # 경로가 비어있지 않은 경우 존재 여부 확인
-        if path_value and not os.path.exists(path_value):
-            st.error(f"❌ 설정하려는 경로가 존재하지 않습니다: {path_value}")
-            return False
-
-        paths = self.get_paths()
-        paths[path_key] = path_value
-        return self.save_paths(paths)
-
-
-# 전역 SavePathManager 인스턴스
-_save_path_manager = None
-
-def get_save_path_manager() -> SavePathManager:
-    """SavePathManager 싱글톤 인스턴스를 반환합니다."""
-    global _save_path_manager
-    if _save_path_manager is None:
-        _save_path_manager = SavePathManager()
-    return _save_path_manager
-
-
-# 편의 함수들 - 다른 모듈에서 경로를 쉽게 가져올 수 있도록
-def get_convert_data_path() -> str:
-    """변환 데이터 저장 경로를 반환합니다."""
-    return get_save_path_manager().get_path('convert_data_path')
-
-def get_split_data_path() -> str:
-    """분할 데이터 저장 경로를 반환합니다."""
-    return get_save_path_manager().get_path('split_data_path')
-
-def get_log_save_path() -> str:
-    """로그 데이터 저장 경로를 반환합니다."""
-    return get_save_path_manager().get_path('log_save_path')
+# class SavePathManager:
+#     """save_path.toml 파일을 관리하는 클래스"""
+#
+#     def __init__(self, save_path_file: str = None):
+#         # 현재 파일의 디렉토리를 기준으로 프로젝트 루트를 찾음
+#         if save_path_file is None:
+#             current_dir = os.path.dirname(os.path.abspath(__file__))
+#             project_root = os.path.dirname(current_dir)  # features 폴더의 상위 디렉토리
+#             save_path_file = os.path.join(project_root, "setup", "save_path.toml")
+#         self.save_path_file = save_path_file
+#         self._paths = None
+#         self.load_paths()
+#
+#     def load_paths(self) -> Dict[str, str]:
+#         """save_path.toml 파일을 로드합니다."""
+#         try:
+#             if os.path.exists(self.save_path_file):
+#                 with open(self.save_path_file, 'r', encoding='utf-8') as f:
+#                     self._paths = toml.load(f)
+#
+#                 # 로드된 경로가 실제로 존재하는지 검증하고, 존재하지 않으면 초기화
+#                 paths_updated = False
+#                 for path_key in ['convert_data_path', 'split_data_path', 'log_save_path']:
+#                     if path_key in self._paths and self._paths[path_key]:
+#                         # 경로가 비어있지 않은 경우에만 존재 여부 확인
+#                         if not os.path.exists(self._paths[path_key]):
+#                             st.warning(f"⚠️ 저장된 {path_key} 경로가 존재하지 않습니다. 경로를 초기화합니다: {self._paths[path_key]}")
+#                             self._paths[path_key] = ''
+#                             paths_updated = True
+#                     elif path_key not in self._paths:
+#                         # 키가 없는 경우 기본값 추가
+#                         self._paths[path_key] = ''
+#                         paths_updated = True
+#
+#                 # 경로가 업데이트된 경우 파일에 저장
+#                 if paths_updated:
+#                     self.save_paths(self._paths)
+#
+#             else:
+#                 # 파일이 없으면 기본값으로 생성
+#                 self._paths = {
+#                     'convert_data_path': '',
+#                     'split_data_path': '',
+#                     'log_save_path': ''
+#                 }
+#                 self.save_paths(self._paths)
+#         except Exception as e:
+#             st.error(f"경로 설정 파일 로드 중 오류 발생: {str(e)}")
+#             self._paths = {
+#                 'convert_data_path': '',
+#                 'split_data_path': '',
+#                 'log_save_path': ''
+#             }
+#         return self._paths
+#
+#     def save_paths(self, paths: Dict[str, str]) -> bool:
+#         """save_path.toml 파일을 저장합니다."""
+#         try:
+#             with open(self.save_path_file, 'w', encoding='utf-8') as f:
+#                 toml.dump(paths, f)
+#             self._paths = paths
+#             return True
+#         except Exception as e:
+#             st.error(f"경로 설정 파일 저장 중 오류 발생: {str(e)}")
+#             return False
+#
+#     def get_paths(self) -> Dict[str, str]:
+#         """현재 경로 설정을 반환합니다."""
+#         if self._paths is None:
+#             self.load_paths()
+#         return self._paths
+#
+#     def get_path(self, path_key: str) -> str:
+#         """특정 경로를 반환합니다."""
+#         paths = self.get_paths()
+#         return paths.get(path_key, '')
+#
+#     def set_path(self, path_key: str, path_value: str) -> bool:
+#         """특정 경로를 설정하고 저장합니다."""
+#         # 경로가 비어있지 않은 경우 존재 여부 확인
+#         if path_value and not os.path.exists(path_value):
+#             st.error(f"❌ 설정하려는 경로가 존재하지 않습니다: {path_value}")
+#             return False
+#
+#         paths = self.get_paths()
+#         paths[path_key] = path_value
+#         return self.save_paths(paths)
+#
+#
+# # 전역 SavePathManager 인스턴스
+# _save_path_manager = None
+#
+# def get_save_path_manager() -> SavePathManager:
+#     """SavePathManager 싱글톤 인스턴스를 반환합니다."""
+#     global _save_path_manager
+#     if _save_path_manager is None:
+#         _save_path_manager = SavePathManager()
+#     return _save_path_manager
+#
+#
+# # 편의 함수들 - 다른 모듈에서 경로를 쉽게 가져올 수 있도록
+# def get_convert_data_path() -> str:
+#     """변환 데이터 저장 경로를 반환합니다."""
+#     return get_save_path_manager().get_path('convert_data_path')
+#
+# def get_split_data_path() -> str:
+#     """분할 데이터 저장 경로를 반환합니다."""
+#     return get_save_path_manager().get_path('split_data_path')
+#
+# def get_log_save_path() -> str:
+#     """로그 데이터 저장 경로를 반환합니다."""
+#     return get_save_path_manager().get_path('log_save_path')
