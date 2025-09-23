@@ -97,22 +97,25 @@ def calculate_duration(start_time, end_time):
     Returns:
         int: 지속시간 (분 단위)
     """
-    # time 객체에서 시간과 분 추출
+    # 시간 객체에서 시간과 분 추출
     start_hour = start_time.hour
     start_min = start_time.minute
     end_hour = end_time.hour
     end_min = end_time.minute
 
-    # 시간을 분 단위로 변환
-    start_total_min = start_hour * 60 + start_min
-    end_total_min = end_hour * 60 + end_min
+    # datetime.time 객체를 datetime.datetime 객체로 변환 (같은 날짜로 가정)
+    from datetime import datetime, timedelta
+
+    base_date = datetime(2000, 1, 1)  # 임의의 기준일
+    start_dt = base_date.replace(hour=start_hour, minute=start_min, second=0)
+    end_dt = base_date.replace(hour=end_hour, minute=end_min, second=0)
 
     # 만약 시작 시간이 종료 시간보다 늦다면 (자정을 넘긴 경우)
-    if start_total_min > end_total_min:
-        end_total_min += 24 * 60  # 하루(1440분) 추가
+    if end_dt < start_dt:
+        end_dt += timedelta(days=1)
 
     # 시간 차이 계산 (분 단위)
-    duration = end_total_min - start_total_min
+    duration = int((end_dt - start_dt).total_seconds() // 60)
     return duration
 
 
@@ -378,12 +381,12 @@ def add_error_columns(df, error_data):
 
     # 컬럼 매니저를 통해 컬럼명 가져오기
     column_manager = get_column_manager()
-    
+
     # 기본 컬럼명들 가져오기
     order_col = column_manager.get_column('order_col')
     input_col = column_manager.get_column('input_col')
     product_col = column_manager.get_column('product_col')
-    
+
     # 에러 컬럼명들 가져오기
     total_duration = column_manager.get_error_column('total_duration')
     answer_combine = column_manager.get_error_column('answer_combine')
@@ -394,7 +397,7 @@ def add_error_columns(df, error_data):
     start_end_duplicate = column_manager.get_error_column('start_end_duplicate')
     duration_error = column_manager.get_error_column('duration_error')
     time_error = column_manager.get_error_column('time_error')
-    
+
     # 설정값 가져오기
     duration_max = get_duration_max()
 
